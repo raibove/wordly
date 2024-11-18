@@ -9,7 +9,9 @@ export type WebviewToBlockMessage = {
 
 export type BlocksToWebviewMessage = {
   type: "INIT";
-  payload: {};
+  payload: {
+    postId: string;
+  };
 } | {
   type: "GET_POKEMON_RESPONSE";
   payload: { number: number; name: string; error?: string };

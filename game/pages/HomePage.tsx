@@ -1,9 +1,18 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, useEffect, useState } from 'react';
 import { useSetPage } from '../hooks/usePage';
 import { cn } from '../utils';
+import { useDevvitListener } from '../hooks/useDevvitListener';
 
 export const HomePage = () => {
+  const [postId, setPostId] = useState('');
+  const initData = useDevvitListener('INIT');
   const setPage = useSetPage();
+
+  useEffect(() => {
+    if (initData) {
+      setPostId(initData.postId);
+    }
+  }, [initData, setPostId]);
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-slate-900">
@@ -13,12 +22,13 @@ export const HomePage = () => {
       <p className="relative z-20 mb-4 mt-2 text-center text-neutral-300">
         Let's build something awesome!
       </p>
+      <p className="relative z-20 mb-4 mt-2 text-center text-neutral-300">PostId: {postId}</p>
       <MagicButton
         onClick={() => {
           setPage('pokemon');
         }}
       >
-        Cool, but let's play Pokemon
+        Show me more
       </MagicButton>
     </div>
   );

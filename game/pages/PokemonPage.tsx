@@ -9,7 +9,7 @@ export const PokemonPage = () => {
   const pokemon = useDevvitListener('GET_POKEMON_RESPONSE');
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-6">
+    <div className="flex h-full flex-col items-center justify-center gap-6 p-6">
       <PlaceholdersAndVanishInput
         placeholders={['Try ditto', 'Try pikachu', 'Try bulbasaur']}
         onChange={(e) => setValue(e.target.value)}
