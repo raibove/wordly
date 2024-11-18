@@ -9,7 +9,7 @@ export const PokemonPage = () => {
   const pokemon = useDevvitListener('GET_POKEMON_RESPONSE');
 
   return (
-    <div className="h-full flex items-center justify-center gap-6 flex-col">
+    <div className="flex h-full flex-col items-center justify-center gap-6">
       <PlaceholdersAndVanishInput
         placeholders={['Try ditto', 'Try pikachu', 'Try bulbasaur']}
         onChange={(e) => setValue(e.target.value)}
@@ -22,9 +22,9 @@ export const PokemonPage = () => {
         }}
       />
       {loading && !pokemon ? (
-        <div className="text-white text-center">Loading...</div>
+        <div className="text-center text-white">Loading...</div>
       ) : (
-        <div className="flex-col flex items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-4">
           <p className="text-white">Pokemon Number: {pokemon?.number}</p>
         </div>
       )}
