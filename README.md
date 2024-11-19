@@ -2,6 +2,8 @@
 
 A template repository for writing webview apps with Devvit.
 
+![demo](./docs/howItWords.mp4)
+
 ### Tech
 
 - [Devvit](https://developers.reddit.com/docs/): Reddit’s Developer Platform that lets you build powerful apps and experiences to enhance the communities you love.
