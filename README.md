@@ -2,7 +2,7 @@
 
 A template repository for writing webview apps with Devvit.
 
-![demo](./docs/howItWords.mp4)
+https://github.com/user-attachments/assets/5bf4d6ec-5ff1-49ce-8c50-f46e7fbac781
 
 ### Tech
 
