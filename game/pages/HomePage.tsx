@@ -1,18 +1,9 @@
-import { ComponentProps, useEffect, useState } from 'react';
+import { ComponentProps } from 'react';
 import { useSetPage } from '../hooks/usePage';
 import { cn } from '../utils';
-import { useDevvitListener } from '../hooks/useDevvitListener';
 
-export const HomePage = () => {
-  const [postId, setPostId] = useState('');
-  const initData = useDevvitListener('INIT');
+export const HomePage = ({ postId }: { postId: string }) => {
   const setPage = useSetPage();
-
-  useEffect(() => {
-    if (initData) {
-      setPostId(initData.postId);
-    }
-  }, [initData, setPostId]);
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-slate-900">

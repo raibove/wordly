@@ -63,6 +63,14 @@ Devvit.addCustomPostType({
               const data = event as unknown as WebviewToBlockMessage;
 
               switch (data.type) {
+                case 'INIT':
+                  sendMessageToWebview(context, {
+                    type: 'INIT_RESPONSE',
+                    payload: {
+                      postId: context.postId!,
+                    },
+                  });
+                  break;
                 case 'GET_POKEMON_REQUEST':
                   context.ui.showToast({ text: `Received message: ${JSON.stringify(data)}` });
                   const pokemon = await getPokemonByName(data.payload.name);
@@ -80,7 +88,7 @@ Devvit.addCustomPostType({
                   break;
 
                 default:
-                  console.error('Unknown message type', data.type satisfies never);
+                  console.error('Unknown message type', data satisfies never);
                   break;
               }
             }}
@@ -89,13 +97,6 @@ Devvit.addCustomPostType({
           <button
             onPress={() => {
               setLaunched(true);
-
-              sendMessageToWebview(context, {
-                type: 'INIT',
-                payload: {
-                  postId: context.postId!,
-                },
-              });
             }}
           >
             Launch

@@ -2,13 +2,13 @@ export type Page =
   | "home"
   | "pokemon";
 
-export type WebviewToBlockMessage = {
+export type WebviewToBlockMessage = { type: "INIT" } | {
   type: "GET_POKEMON_REQUEST";
   payload: { name: string };
 };
 
 export type BlocksToWebviewMessage = {
-  type: "INIT";
+  type: "INIT_RESPONSE";
   payload: {
     postId: string;
   };
