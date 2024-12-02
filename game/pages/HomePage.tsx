@@ -13,6 +13,7 @@ export const HomePage = ({ postId }: { postId: string }) => {
       <p className="relative z-20 mb-4 mt-2 text-center text-neutral-300">
         Let's build something awesome!
       </p>
+      <img src="/assets/default-snoovatar.png" alt="default snoovatar picture" />
       <p className="relative z-20 mb-4 mt-2 text-center text-neutral-300">PostId: {postId}</p>
       <MagicButton
         onClick={() => {
