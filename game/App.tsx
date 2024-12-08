@@ -21,6 +21,7 @@ export const App = () => {
   const [postId, setPostId] = useState('');
   const page = usePage();
   const initData = useDevvitListener('INIT_RESPONSE');
+  console.log('<< init data', initData)
   useEffect(() => {
     sendToDevvit({ type: 'INIT' });
   }, []);

@@ -59,9 +59,9 @@ Devvit.addCustomPostType({
             width={'100%'}
             height={'100%'}
             onMessage={async (event) => {
-              console.log('Received message', event);
+              console.log('<< Received message', event);
               const data = event as unknown as WebviewToBlockMessage;
-
+              
               switch (data.type) {
                 case 'INIT':
                   sendMessageToWebview(context, {
