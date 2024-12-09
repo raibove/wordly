@@ -80,6 +80,16 @@ export const HomePage = ({ postId }: { postId: string }) => {
             {gamePhase === 'identify' && (
               <p>Which word has changed? Click to select!</p>
             )}
+
+            {
+              gamePhase === 'end' && (
+                <div className='flex flex-col items-center'>
+                  <p>Game Over!</p>
+                  <p className='text-purple-300'>Final Score: {score}</p>
+                  <MagicButton onClick={resetGame}>Play Again</MagicButton>
+                </div>
+              )
+            }
           </motion.div>
           <WordDisplay
             onWordClick={handleWordSelect}

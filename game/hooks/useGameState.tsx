@@ -65,18 +65,19 @@ export const useGameState = () => {
 
   const handleWordSelect = useCallback((selectedIndex: number) => {
     const isCorrect = selectedIndex === gameState.changedWordIndex;
-    
+    console.log('<< isCorrect', isCorrect)
     setGameState(prev => {
       const newMistakes = isCorrect ? prev.mistakes : prev.mistakes + 1;
       const isGameOver = newMistakes >= MAX_MISTAKES;
-      console.log('score', )
       return {
         ...prev,
         score: prev.score + (isCorrect ? 10  : 0),
         streak: isCorrect ? prev.streak + 1 : 1,
         level: isCorrect ? prev.level + 1 : prev.level,
         mistakes: newMistakes,
-        isGameOver
+        isGameOver,
+        gamePhase: isGameOver ? 'end' : prev.gamePhase,
+        isVisible: isGameOver ? false : prev.isVisible
       };
     });
 
