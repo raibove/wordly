@@ -5,9 +5,10 @@ import { HelpCircle, X } from 'lucide-react';
 interface HelpModalProps {
   isOpen: boolean;
   onClose: () => void;
+  isFirstTimeOpen: boolean;
 }
 
-export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
+export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isFirstTimeOpen }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -50,12 +51,15 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
                 Ready to test your memory?
               </p>
               <div className='justify-center w-full flex'>
-              <button
-               onClick={onClose}
-               className='m-4 bg-purple-500 text-yellow-300 h-12 p-2 items-center justify-center rounded-full flex'
-              >
-                Start Playing
-            </button>
+              {
+                isFirstTimeOpen && (
+                <button
+                  onClick={onClose}
+                  className='m-4 bg-purple-500 text-yellow-300 h-12 p-2 items-center justify-center rounded-full flex'
+                  >
+                    Start Playing
+                </button>
+              )}
             </div>
             </div>
           </motion.div>

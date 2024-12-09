@@ -6,6 +6,9 @@ import { motion } from 'motion/react';
 import { GamePhase } from '../types';
 import { WordDisplay } from '../components/wordDisplay';
 import { useGameState } from '../hooks/useGameState';
+import { HelpButton } from '../components/helpButton';
+import { Timer } from '../components/timer';
+import { GameStats } from '../components/gameStats';
 // import { useGameState } from '../hooks/useGameState';
 
 export const HomePage = ({ postId }: { postId: string }) => {
@@ -13,22 +16,20 @@ export const HomePage = ({ postId }: { postId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [firstTimeOpen, setFirstTimeOpen] = useState(false);
 
-  const { 
-    words, 
-    isVisible, 
-    timeLeft, 
+  const {
+    words,
+    isVisible,
+    timeLeft,
     gamePhase,
-    level,
     score,
-    streak,
     isGameOver,
     handleWordSelect,
     resetGame,
     startGame,
   } = useGameState();
 
-  const onClose = ()=>{
-    if(firstTimeOpen){
+  const onClose = () => {
+    if (firstTimeOpen) {
       setFirstTimeOpen(false);
       startGame();
     }
@@ -43,23 +44,27 @@ export const HomePage = ({ postId }: { postId: string }) => {
   }, []);
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-slate-900">
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-slate-900 max-w-4xl m-auto">
       <div className="pointer-events-none absolute inset-0 z-20 h-full w-full bg-slate-900 [mask-image:radial-gradient(transparent,white)]" />
-      <div>
+      <div className='z-50'>
         {/* Header */}
-        <div>
-
+        <div className='absolute top-4 left-4 flex justify-between w-[96%] items-center'>
+          <HelpButton onClick={() => setIsOpen(true)} />
+          <motion.h1
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="text-3xl font-bold text-center text-purple-300"
+          >
+            Word Memory Game
+          </motion.h1>
+          <div className='flex gap-4 items-center'>
+          <GameStats score={score} />
+          {gamePhase === 'memorize' && <Timer seconds={timeLeft} />}
+          </div>
         </div>
         {/* Game con */}
         <div>
-        <motion.h1
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="text-3xl font-bold text-center mb-6 text-purple-300"
-        >
-            Word Memory Game
-        </motion.h1>
-        <motion.div
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center mb-4 text-purple-400 text-sm"
@@ -76,15 +81,15 @@ export const HomePage = ({ postId }: { postId: string }) => {
               <p>Which word has changed? Click to select!</p>
             )}
           </motion.div>
-              <WordDisplay
-              onWordClick={handleWordSelect}
-              gamePhase={gamePhase}
-              words={words}
-              visible={isVisible}
-              />
+          <WordDisplay
+            onWordClick={handleWordSelect}
+            gamePhase={gamePhase}
+            words={words}
+            visible={isVisible}
+          />
         </div>
       </div>
-      <HelpModal isOpen={isOpen} onClose={onClose}/>
+      <HelpModal isOpen={isOpen} onClose={onClose} isFirstTimeOpen={firstTimeOpen} />
     </div>
   );
 };

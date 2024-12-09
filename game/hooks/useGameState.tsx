@@ -4,7 +4,7 @@ import type { GameState, GamePhase } from '../types';
 
 const INITIAL_TIME = 10;
 const WORDS_PER_LEVEL = 5;
-const MAX_MISTAKES = 3;
+const MAX_MISTAKES = 1;
 
 export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>({
@@ -26,6 +26,16 @@ export const useGameState = () => {
     setGameState(prev => ({
       ...prev,
       words: initialWords,
+      changedWordIndex: null,
+      isVisible: true,
+      timeLeft: Math.max(INITIAL_TIME - Math.floor(prev.level / 3), 5),
+      gamePhase: 'memorize'
+    }));
+  }, []);
+
+  const moveToNextRound = useCallback(() => {
+    setGameState(prev => ({
+      ...prev,
       changedWordIndex: null,
       isVisible: true,
       timeLeft: Math.max(INITIAL_TIME - Math.floor(prev.level / 3), 5),
@@ -59,10 +69,10 @@ export const useGameState = () => {
     setGameState(prev => {
       const newMistakes = isCorrect ? prev.mistakes : prev.mistakes + 1;
       const isGameOver = newMistakes >= MAX_MISTAKES;
-
+      console.log('score', )
       return {
         ...prev,
-        score: prev.score + (isCorrect ? 10 * prev.streak : 0),
+        score: prev.score + (isCorrect ? 10  : 0),
         streak: isCorrect ? prev.streak + 1 : 1,
         level: isCorrect ? prev.level + 1 : prev.level,
         mistakes: newMistakes,
@@ -76,11 +86,11 @@ export const useGameState = () => {
 
     // Show result briefly before starting new round
     setTimeout(() => {
-      startNewRound();
+      moveToNextRound();
     }, 1500);
 
     return isCorrect;
-  }, [gameState.changedWordIndex, gameState.mistakes, startNewRound]);
+  }, [gameState.changedWordIndex, gameState.mistakes, moveToNextRound]);
 
   useEffect(() => {
     console.log(gameState.shouldStartGame)
@@ -91,6 +101,7 @@ export const useGameState = () => {
   }, [startNewRound, gameState.isGameOver, gameState.shouldStartGame]);
 
   useEffect(() => {
+    if(!gameState.shouldStartGame) return;
     if (gameState.timeLeft === 0 && gameState.gamePhase === 'memorize') {
       setGameState(prev => ({
         ...prev,
@@ -119,7 +130,7 @@ export const useGameState = () => {
       );
       return () => clearTimeout(timer);
     }
-  }, [gameState.timeLeft, gameState.gamePhase, gameState.words]);
+  }, [gameState.timeLeft, gameState.gamePhase, gameState.words, gameState.shouldStartGame]);
 
   return {
     startGame,

@@ -1,4 +1,4 @@
-export type GamePhase = 'memorize' | 'transition' | 'identify';
+export type GamePhase = 'memorize' | 'transition' | 'identify' | 'end';
 
 export interface GameStats {
   level: number;
