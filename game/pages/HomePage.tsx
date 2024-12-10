@@ -73,9 +73,9 @@ export const HomePage = ({ postId }: { postId: string }) => {
               <p>Memorize these words! Time remaining:</p>
             )}
 
-            {gamePhase === 'transition' && (
+            {/* {gamePhase === 'transition' && (
               <p>Get ready to spot the difference...</p>
-            )}
+            )} */}
 
             {gamePhase === 'identify' && (
               <p>Which word has changed? Click to select!</p>

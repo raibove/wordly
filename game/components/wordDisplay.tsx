@@ -9,6 +9,8 @@ interface WordDisplayProps {
 }
 
 export const WordDisplay: React.FC<WordDisplayProps> = ({ words, visible, gamePhase, onWordClick }) => {
+  if(gamePhase === 'end') return null;
+
   if (!visible) {
     return (
       <motion.div
@@ -20,13 +22,11 @@ export const WordDisplay: React.FC<WordDisplayProps> = ({ words, visible, gamePh
           animate={{ scale: [1, 1.1, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
-          Memorize the words...
+          Get ready to spot the difference...
         </motion.span>
       </motion.div>
     );
   }
-
-  console.log('< ', words)
 
   return (
     <div className="grid grid-cols-1 gap-2 w-full max-w-sm mx-auto">
