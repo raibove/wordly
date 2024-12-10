@@ -10,6 +10,7 @@ import { WEBVIEW_ID } from './constants.js';
 import { Preview } from './components/Preview.js';
 import { getPokemonByName } from './core/pokeapi.js';
 import { ChallengeToPost } from './challengeToPost.js';
+import { Challenge } from './challenge.js';
 
 
 Devvit.addSettings([
@@ -102,25 +103,24 @@ Devvit.addCustomPostType({
               
               switch (data.type) {
                 case 'INIT':
+                  const challengeNumber = await ChallengeToPost.getChallengeNumberForPost({
+                    postId: context.postId!,
+                    redis: context.redis,
+                  });
+                  const username =  initialState.user?.username!;
+                  const [challengeInfo] = await Promise.all([
+                    Challenge.getChallenge({
+                      challenge: challengeNumber,
+                      redis: context.redis,
+                    }),
+                  ]);
+
                   sendMessageToWebview(context, {
                     type: 'INIT_RESPONSE',
                     payload: {
                       postId: context.postId!,
-                    },
-                  });
-                  break;
-                case 'GET_POKEMON_REQUEST':
-                  context.ui.showToast({ text: `Received message: ${JSON.stringify(data)}` });
-                  const pokemon = await getPokemonByName(data.payload.name);
-
-                  sendMessageToWebview(context, {
-                    type: 'GET_POKEMON_RESPONSE',
-                    payload: {
-                      name: pokemon.name,
-                      number: pokemon.id,
-                      // Note that we don't allow outside images on Reddit if
-                      // wanted to get the sprite. Please reach out to support
-                      // if you need this for your app!
+                      username,
+                      challengeInfo
                     },
                   });
                   break;

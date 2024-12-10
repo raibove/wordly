@@ -11,7 +11,7 @@ import { Timer } from '../components/timer';
 import { GameStats } from '../components/gameStats';
 // import { useGameState } from '../hooks/useGameState';
 
-export const HomePage = ({ postId }: { postId: string }) => {
+export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
   const setPage = useSetPage();
   const [isOpen, setIsOpen] = useState(false);
   const [firstTimeOpen, setFirstTimeOpen] = useState(false);
@@ -31,7 +31,7 @@ export const HomePage = ({ postId }: { postId: string }) => {
   const onClose = () => {
     if (firstTimeOpen) {
       setFirstTimeOpen(false);
-      startGame();
+      startGame(initialWords);
     }
     setIsOpen(false);
   }

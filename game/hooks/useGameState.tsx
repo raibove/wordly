@@ -60,8 +60,8 @@ export const useGameState = () => {
     });
   }, []);
 
-  const startGame = () => {
-    setGameState(prev => ({ ...prev, shouldStartGame: true }));
+  const startGame = (initialWords: string[]) => {
+    setGameState(prev => ({ ...prev, shouldStartGame: true, words: initialWords }));
   };
 
   const handleWordSelect = useCallback((selectedIndex: number) => {

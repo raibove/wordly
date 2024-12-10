@@ -6,19 +6,19 @@ import { useEffect, useState } from 'react';
 import { sendToDevvit } from './utils';
 import { useDevvitListener } from './hooks/useDevvitListener';
 
-const getPage = (page: Page, { postId }: { postId: string }) => {
+const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
   switch (page) {
     case 'home':
-      return <HomePage postId={postId} />;
-    case 'pokemon':
-      return <PokemonPage />;
+      return <HomePage initialWords={initialWords} />;
+    // case 'pokemon':
+    //   return <PokemonPage />;
     default:
       throw new Error(`Unknown page: ${page satisfies never}`);
   }
 };
 
 export const App = () => {
-  const [postId, setPostId] = useState('');
+  const [initialWords, setInitialWords] = useState<string[]>([]);
   const page = usePage();
   const initData = useDevvitListener('INIT_RESPONSE');
   console.log('<< init data', initData)
@@ -28,9 +28,11 @@ export const App = () => {
 
   useEffect(() => {
     if (initData) {
-      setPostId(initData.postId);
+      console.log('<< init data', initData)
+      const words = initData.challengeInfo.words.split(',') as string[];
+      setInitialWords(words);
     }
-  }, [initData, setPostId]);
+  }, [initData, setInitialWords]);
 
-  return <div className="h-full">{getPage(page, { postId })}</div>;
+  return <div className="h-full">{getPage(page, { initialWords })}</div>;
 };

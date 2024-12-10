@@ -1,21 +1,21 @@
-export type Page =
-  | "home"
-  | "pokemon";
+export interface ChallengeInfo {
+  words: string,
+  totalPlayers: number,
+}
 
-export type WebviewToBlockMessage = { type: "INIT" } | {
-  type: "GET_POKEMON_REQUEST";
-  payload: { name: string };
-};
+export type Page =
+  | "home";
+
+export type WebviewToBlockMessage = { type: "INIT" } 
 
 export type BlocksToWebviewMessage = {
   type: "INIT_RESPONSE";
   payload: {
     postId: string;
+    username: string;
+    challengeInfo: ChallengeInfo
   };
-} | {
-  type: "GET_POKEMON_RESPONSE";
-  payload: { number: number; name: string; error?: string };
-};
+} 
 
 export type DevvitMessage = {
   type: "devvit-message";

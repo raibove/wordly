@@ -4,6 +4,7 @@ import { stringifyValues } from './utils/utils.js';
 import { Preview } from './components/Preview.js';
 import { getRandomWords } from './words.js';
 import { ChallengeToPost } from './challengeToPost.js';
+import { ChallengeInfo } from '../game/shared.js';
 
 const WORDS_PER_LEVEL = 5;
 
@@ -38,13 +39,12 @@ export const getChallenge = async ({ redis, challenge }: { redis: RedisType, cha
   return result;
 }
 
+
+
 interface ChallengeConfig {
   redis: RedisType,
   challenge: number,
-  config: {
-    words: string[],
-    totalPlayers: number,
-  }
+  config: ChallengeInfo
 }
 
 export const setChallenge = async ({ redis, challenge, config }: ChallengeConfig) => {
