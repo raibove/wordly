@@ -3,7 +3,6 @@ import { getRandomWords, replaceRandomWord } from '../data/words';
 import type { GameState, GamePhase } from '../types';
 
 const INITIAL_TIME = 10;
-const WORDS_PER_LEVEL = 5;
 const MAX_MISTAKES = 1;
 
 export const useGameState = () => {
@@ -22,7 +21,9 @@ export const useGameState = () => {
   });
 
   const startNewRound = useCallback(() => {
-    const initialWords = getRandomWords(WORDS_PER_LEVEL);
+    // const initialWords = getRandomWords(WORDS_PER_LEVEL)
+    // TODO
+    const initialWords: string[]=[];
     setGameState(prev => ({
       ...prev,
       words: initialWords,

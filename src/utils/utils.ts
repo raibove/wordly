@@ -8,3 +8,12 @@ export const sendMessageToWebview = (
 ) => {
   context.ui.webView.postMessage(WEBVIEW_ID, message);
 };
+
+
+export const stringifyValues = <T extends Record<string, any>>(
+  obj: T,
+): Record<keyof T, string> => {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, String(value)]),
+  ) as Record<keyof T, string>;
+};
