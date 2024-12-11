@@ -86,7 +86,9 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
                 <div className='flex flex-col items-center'>
                   <p>Game Over!</p>
                   <p className='text-purple-300'>Final Score: {score}</p>
-                  <MagicButton onClick={resetGame}>Play Again</MagicButton>
+                  <MagicButton onClick={()=>{
+                    setPage('leadboard');
+                  }}>Check Leaderboard</MagicButton>
                 </div>
               )
             }

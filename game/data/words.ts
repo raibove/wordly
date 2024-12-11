@@ -2467,7 +2467,6 @@ export const getRandomWords = (count: number): string[] => {
     const randomIndex = Math.random() * remainingWords.length;
     const newWord = remainingWords[Math.floor(randomIndex)];
     const indexToReplace = Math.floor(Math.random() * currentWords.length);
-    console.log('<< new word', newWord, Math.floor(randomIndex), randomIndex)
     const newWords = [...currentWords];
     newWords[indexToReplace] = newWord;
     

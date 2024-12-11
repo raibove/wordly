@@ -4,8 +4,8 @@ import { Page } from '../shared';
 const PageContext = createContext<Page | null>(null);
 const PageUpdaterContext = createContext<React.Dispatch<React.SetStateAction<Page>> | null>(null);
 
-export const PageContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [page, setPage] = useState<Page>('home');
+export const PageContextProvider = ({ children }: { children: JSX.Element }) => {
+  const [page, setPage] = useState<Page>('');
 
   return (
     <PageUpdaterContext.Provider value={setPage}>

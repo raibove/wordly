@@ -1,10 +1,10 @@
 export * as Challenge from './challenge.js';
 import { Devvit, Post, TriggerContext } from "@devvit/public-api";
-import { stringifyValues } from './utils/utils.js';
-import { Preview } from './components/Preview.js';
-import { getRandomWords } from './words.js';
+import { stringifyValues } from '../utils/utils.js';
+import { Preview } from '../components/Preview.js';
+import { getRandomWords } from '../words.js';
 import { ChallengeToPost } from './challengeToPost.js';
-import { ChallengeInfo } from '../game/shared.js';
+import { ChallengeInfo } from '../../game/shared.js';
 
 const WORDS_PER_LEVEL = 5;
 
@@ -78,8 +78,6 @@ export const makeNewChallenge = async ({ context }: { context: Devvit.Context })
     context.reddit.getCurrentSubreddit(),
   ]);
 
-  console.log('Current challenge number:', currentChallengeNumber);
-
   // // Find index of first unused word
   // const unusedWordIndex = wordList.findIndex((word: string) => !usedWords.includes(word));
 
@@ -90,8 +88,6 @@ export const makeNewChallenge = async ({ context }: { context: Devvit.Context })
   // const newWord = wordList[unusedWordIndex];
   const newWords = getRandomWords(WORDS_PER_LEVEL)
   const newChallengeNumber = currentChallengeNumber + 1;
-
-  console.log('Current challenge number:', currentChallengeNumber);
 
   let post: Post | undefined;
 

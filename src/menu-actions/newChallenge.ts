@@ -1,5 +1,5 @@
 import { Devvit } from "@devvit/public-api";
-import { Challenge } from "../challenge.js";
+import { Challenge } from "../core/challenge.js";
 
 Devvit.addMenuItem({
   label: "Wordly testing",

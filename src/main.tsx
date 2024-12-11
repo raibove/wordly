@@ -4,14 +4,13 @@ import './menu-actions/newChallenge.js';
 
 import { Devvit, useAsync, useState } from '@devvit/public-api';
 import { DEVVIT_SETTINGS_KEYS } from './constants.js';
-import { sendMessageToWebview } from './utils/utils.js';
+import { isServerCall, sendMessageToWebview } from './utils/utils.js';
 import { WebviewToBlockMessage } from '../game/shared.js';
 import { WEBVIEW_ID } from './constants.js';
 import { Preview } from './components/Preview.js';
-import { getPokemonByName } from './core/pokeapi.js';
-import { ChallengeToPost } from './challengeToPost.js';
-import { Challenge } from './challenge.js';
-
+import { ChallengeToPost } from './core/challengeToPost.js';
+import { Challenge } from './core/challenge.js';
+import { ChallengeLeaderboard } from './core/leaderboard.js';
 
 Devvit.addSettings([
   // Just here as an example
@@ -98,7 +97,6 @@ Devvit.addCustomPostType({
             width={'100%'}
             height={'100%'}
             onMessage={async (event) => {
-              console.log('<< Received message', event);
               const data = event as unknown as WebviewToBlockMessage;
               
               switch (data.type) {
@@ -108,24 +106,78 @@ Devvit.addCustomPostType({
                     redis: context.redis,
                   });
                   const username =  initialState.user?.username!;
-                  const [challengeInfo] = await Promise.all([
+                  const [challengeInfo,hasUserPlayedChallenge] = await Promise.all([
                     Challenge.getChallenge({
                       challenge: challengeNumber,
                       redis: context.redis,
                     }),
+                    ChallengeLeaderboard.getHasUserPlayedChallenge({
+                      username,
+                      redis: context.redis,
+                      challenge: challengeNumber,
+                    })
                   ]);
-
+                  
+                  console.log('hasUserPlayedChallenge', hasUserPlayedChallenge);
                   sendMessageToWebview(context, {
                     type: 'INIT_RESPONSE',
                     payload: {
                       postId: context.postId!,
                       username,
-                      challengeInfo
+                      challengeInfo,
+                      hasUserPlayedChallenge
                     },
                   });
                   break;
+                case 'UPDATE_SCORE':
+                  try{
+                    await ChallengeLeaderboard.addEntry({
+                      redis: context['redis'],
+                      challenge: initialState.challenge,
+                      score: data.value,
+                      username: initialState.user?.username!,
+                      // avatar: initialState.user?.avatar!,
+                    })
+                  }catch(error){
+                    isServerCall(error);
 
-                default:
+                    console.error('Error submitting guess:', error);
+                    // Sometimes the error is nasty and we don't want to show it
+                    if (error instanceof Error && !['Error: 2'].includes(error.message)) {
+                      context.ui.showToast(error.message);
+                      return;
+                    }
+                    context.ui.showToast(`I'm not sure what happened. Please try again.`);
+                  }
+                  break;
+                case 'GET_LEADERBOARD':
+                  try{
+                    const leaderboard = await ChallengeLeaderboard.getRankingsForMember({
+                      redis: context['redis'],
+                      challenge: initialState.challenge,
+                      username: initialState.user?.username!,
+                    });
+
+                    sendMessageToWebview(context, {
+                      type: 'LEADERBOARD_SCORE',
+                      payload: {
+                        rank: leaderboard.rank,
+                        score: leaderboard.score
+                      },
+                    });
+                  }catch(error){
+                    isServerCall(error);
+
+                    console.error('Error getting leaderboard:', error);
+                    // Sometimes the error is nasty and we don't want to show it
+                    if (error instanceof Error && !['Error: 2'].includes(error.message)) {
+                      context.ui.showToast(error.message);
+                      return;
+                    }
+                    context.ui.showToast(`I'm not sure what happened. Please try again.`);
+                  }
+                  break;
+                  default:
                   console.error('Unknown message type', data satisfies never);
                   break;
               }

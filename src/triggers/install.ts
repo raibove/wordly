@@ -1,5 +1,5 @@
 import { Devvit, TriggerContext } from "@devvit/public-api";
-import { Challenge } from "../challenge.js";
+import { Challenge } from "../core/challenge.js";
 
 export const initialize = async (context: TriggerContext) => {
     // Certain things need to be initialized in Redis to run correctly

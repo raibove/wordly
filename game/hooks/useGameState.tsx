@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getRandomWords, replaceRandomWord } from '../data/words';
 import type { GameState, GamePhase } from '../types';
+import { sendToDevvit } from '../utils';
 
 const INITIAL_TIME = 10;
 const MAX_MISTAKES = 1;
@@ -67,6 +68,9 @@ export const useGameState = () => {
   const handleWordSelect = useCallback((selectedIndex: number) => {
     const isCorrect = selectedIndex === gameState.changedWordIndex;
     console.log('<< isCorrect', isCorrect)
+    if(isCorrect){
+      sendToDevvit({ type: 'UPDATE_SCORE', value: gameState.score + (isCorrect ? 10  : 0)});
+    }
     setGameState(prev => {
       const newMistakes = isCorrect ? prev.mistakes : prev.mistakes + 1;
       const isGameOver = newMistakes >= MAX_MISTAKES;

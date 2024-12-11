@@ -1,17 +1,19 @@
 import { Page } from './shared';
-import { PokemonPage } from './pages/PokemonPage';
 import { HomePage } from './pages/HomePage';
-import { usePage } from './hooks/usePage';
+import { usePage, useSetPage } from './hooks/usePage';
 import { useEffect, useState } from 'react';
 import { sendToDevvit } from './utils';
 import { useDevvitListener } from './hooks/useDevvitListener';
+import Leaderboard from './pages/LeaderboardPage';
 
 const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
   switch (page) {
     case 'home':
       return <HomePage initialWords={initialWords} />;
-    // case 'pokemon':
-    //   return <PokemonPage />;
+    case 'leadboard':
+      return <Leaderboard/>
+    case '':
+      return <div>Loading</div>
     default:
       throw new Error(`Unknown page: ${page satisfies never}`);
   }
@@ -20,15 +22,18 @@ const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
 export const App = () => {
   const [initialWords, setInitialWords] = useState<string[]>([]);
   const page = usePage();
+  const setPage = useSetPage();
   const initData = useDevvitListener('INIT_RESPONSE');
-  console.log('<< init data', initData)
   useEffect(() => {
     sendToDevvit({ type: 'INIT' });
   }, []);
 
   useEffect(() => {
     if (initData) {
-      console.log('<< init data', initData)
+      console.log(initData);
+      if(initData.hasUserPlayedChallenge){
+        setPage('leadboard');
+      }
       const words = initData.challengeInfo.words.split(',') as string[];
       setInitialWords(words);
     }
