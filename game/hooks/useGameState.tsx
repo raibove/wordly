@@ -5,20 +5,18 @@ import { sendToDevvit } from '../utils';
 
 const INITIAL_TIME = 10;
 const MAX_MISTAKES = 1;
-const TIME_FOR_SUBSEQUENT_ROUNDS = INITIAL_TIME/2;
+const TIME_FOR_SUBSEQUENT_ROUNDS = 7;
 
 export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>({
     words: [],
     changedWordIndex: null,
-    isVisible: true,
     timeLeft: INITIAL_TIME,
     gamePhase: 'memorize',
     level: 1,
     score: 0,
     streak: 0,
     mistakes: 0,
-    isGameOver: false,
     shouldStartGame: false,
   });
 
@@ -28,7 +26,6 @@ export const useGameState = () => {
       ...prev,
       words: initialWords,
       changedWordIndex: null,
-      isVisible: true,
       timeLeft: Math.max(INITIAL_TIME, 5),
       gamePhase: 'memorize'
     }));
@@ -38,7 +35,6 @@ export const useGameState = () => {
     setGameState(prev => ({
       ...prev,
       changedWordIndex: null,
-      isVisible: true,
       timeLeft: Math.max(TIME_FOR_SUBSEQUENT_ROUNDS, 5),
       gamePhase: 'memorize'
     }));
@@ -48,14 +44,12 @@ export const useGameState = () => {
     setGameState({
       words: [],
       changedWordIndex: null,
-      isVisible: true,
       timeLeft: INITIAL_TIME,
       gamePhase: 'memorize',
       level: 1,
       score: 0,
       streak: 0,
       mistakes: 0,
-      isGameOver: false,
       shouldStartGame: true,
     });
   }, []);
@@ -78,9 +72,7 @@ export const useGameState = () => {
         streak: isCorrect ? prev.streak + 1 : 1,
         level: isCorrect ? prev.level + 1 : prev.level,
         mistakes: newMistakes,
-        isGameOver,
-        gamePhase: isGameOver ? 'end' : prev.gamePhase,
-        isVisible: isGameOver ? false : prev.isVisible
+        gamePhase: isGameOver ? 'end' :  'cheer',
       };
     });
 
@@ -98,28 +90,25 @@ export const useGameState = () => {
 
   useEffect(() => {
     console.log(gameState.shouldStartGame)
-    if (gameState.words.length === 0 && !gameState.isGameOver && gameState.shouldStartGame) {
+    if (gameState.words.length === 0 && gameState.gamePhase !== 'end' && gameState.shouldStartGame) {
       startNewRound();
     }
-  }, [startNewRound, gameState.isGameOver, gameState.shouldStartGame]);
+  }, [startNewRound, gameState.gamePhase, gameState.shouldStartGame]);
 
   useEffect(() => {
     if(!gameState.shouldStartGame) return;
     if (gameState.timeLeft === 0 && gameState.gamePhase === 'memorize') {
       setGameState(prev => ({
         ...prev,
-        isVisible: false,
         gamePhase: 'transition'
       }));
 
       setTimeout(() => {
         const { newWords, replacedIndex } = replaceRandomWord(gameState.words);
-        console.log('New words:', newWords, gameState.words);
         setGameState(prev => ({
           ...prev,
           words: newWords,
           changedWordIndex: replacedIndex,
-          isVisible: true,
           gamePhase: 'identify'
         }));
       }, 2000);

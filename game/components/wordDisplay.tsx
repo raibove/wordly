@@ -1,17 +1,29 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GameStats } from './gameStats';
 
 interface WordDisplayProps {
   words: string[];
-  visible: boolean;
   gamePhase: string;
   onWordClick?: (index: number) => void;
+  level: number;
 }
 
-export const WordDisplay: React.FC<WordDisplayProps> = ({ words, visible, gamePhase, onWordClick }) => {
+export const WordDisplay: React.FC<WordDisplayProps> = ({ words, gamePhase, onWordClick, level }) => {
   if(gamePhase === 'end') return null;
 
-  if (!visible) {
+  // if(true){
+  if(gamePhase === 'cheer') {
+    return (
+      <div className="flex items-center justify-center flex-col h-32 text-xl font-bold text-purple-300">
+        <span className="text-xl font-bold text-purple-300">🎉 You did it</span>
+        <br/>
+        <GameStats level={level -1}/>
+      </div>
+    );
+  }
+
+  if (gamePhase === 'transition') {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -29,7 +41,7 @@ export const WordDisplay: React.FC<WordDisplayProps> = ({ words, visible, gamePh
   }
 
   return (
-    <div className="grid grid-cols-1 gap-2 w-full max-w-sm mx-auto">
+    <div className="grid grid-cols-1 gap-2 w-full max-w-screen-sm min-w-60 mx-auto ">
       <AnimatePresence mode="wait">
         {words.map((word, index) => (
           <motion.div

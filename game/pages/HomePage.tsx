@@ -19,13 +19,10 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
 
   const {
     words,
-    isVisible,
     timeLeft,
     gamePhase,
     score,
-    isGameOver,
     handleWordSelect,
-    resetGame,
     startGame,
     level
   } = useGameState();
@@ -55,12 +52,12 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
           <motion.h1
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="text-3xl font-bold text-center text-purple-300"
+            className="text-2xl font-bold text-center text-purple-300"
           >
             Word Memory Game
           </motion.h1>
           <div className='flex gap-4 items-center'>
-          <GameStats level={level} />
+          {/* <GameStats level={level} /> */}
           {gamePhase === 'memorize' && <Timer seconds={timeLeft} />}
           </div>
         </div>
@@ -72,7 +69,7 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
             className="text-center mb-4 text-purple-400 text-sm"
           >
             {gamePhase === 'memorize' && (
-              <p>Memorize these words! Time remaining:</p>
+              <p>Memorize these words!</p>
             )}
 
             {/* {gamePhase === 'transition' && (
@@ -96,7 +93,7 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
             onWordClick={handleWordSelect}
             gamePhase={gamePhase}
             words={words}
-            visible={isVisible}
+            level={level}
           />
         </div>
       </div>

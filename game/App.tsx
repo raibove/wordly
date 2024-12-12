@@ -7,6 +7,7 @@ import { useDevvitListener } from './hooks/useDevvitListener';
 import Leaderboard from './pages/LeaderboardPage';
 import { Loader } from './components/Loader';
 import AlreadyPlayed from './pages/AlreadyPlayed';
+import { getRandomWords } from './data/words';
 
 const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
   switch (page) {
@@ -48,6 +49,12 @@ export const App = () => {
       setInitialWords(words);
     }
   }, [initData, setInitialWords]);
+
+  // // TODO delete this
+  // useEffect(()=>{
+  //   setInitialWords(getRandomWords(5));
+  //   setPage('home');
+  // },[])
 
   return <div className="h-full">{getPage(page, { initialWords })}</div>;
 };

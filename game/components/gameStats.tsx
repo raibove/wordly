@@ -1,36 +1,54 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Trophy, Zap } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { Zap } from 'lucide-react';
 
 interface GameStatsProps {
   level: number;
 }
 
 export const GameStats: React.FC<GameStatsProps> = ({ level }) => {
+  const controls = useAnimation();
+
+  // Function to trigger the power-up animation
+  const playPowerUpAnimation = async () => {
+    await controls.start({
+      scale: [1, 1.2, 1],
+      // filter: ['brightness(1)', 'brightness(1.5)', 'brightness(1)'],
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      }
+    });
+  };
+
+  // Trigger animation when level changes
+  useEffect(() => {
+    playPowerUpAnimation();
+  }, [level]);
+
   return (
     <motion.div
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className=" translate-x-1/2 flex gap-6"
+      className="translate-x-1/2 flex gap-6"
     >
-      <div className="flex items-center gap-2 bg-purple-900/50 px-4 py-2 rounded-full">
-        <Trophy size={20} className="text-yellow-400" />
-        <span className="text-purple-200">Level {level}</span>
-      </div>
-      {/* <div className="flex items-center gap-2 bg-purple-900/50 px-4 py-2 rounded-full">
-        <Zap size={20} className="text-yellow-400" />
-        <span className="text-purple-200">{score}</span>
-      </div> */}
-      {/* {streak > 1 && (
+      <motion.div
+        animate={controls}
+        className="flex items-center gap-2 bg-purple-500 px-4 py-2 rounded-full transition-shadow duration-300"
+      >
         <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="flex items-center gap-2 bg-purple-900/50 px-4 py-2 rounded-full"
+          animate={{
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 0.5,
+            ease: "easeInOut",
+          }}
         >
-          <ArrowUp size={20} className="text-red-400" />
-          <span className="text-purple-200">x{streak}</span>
+          <Zap size={20} className="text-yellow-400" />
         </motion.div>
-      )} */}
+        <span className="text-purple-200">{level}</span>
+      </motion.div>
     </motion.div>
   );
 };
