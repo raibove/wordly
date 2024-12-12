@@ -16,3 +16,11 @@ export interface GameState extends GameStats {
   isGameOver: boolean;
   shouldStartGame: boolean;
 }
+export interface LeaderboardPlayer {
+  // id: string;
+  username: string;
+  // avatar: string;
+  score: number;
+  // level: number;
+  // bestStreak: number;
+}

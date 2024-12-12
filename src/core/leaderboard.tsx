@@ -24,7 +24,7 @@ export const getLeaderboardByScore = async ({ redis, challenge, sort, start, sto
     return result;
 }
 
-export const addEntry = async ({ redis, challenge, username, score }:
+export const addEntry = async ({ redis, challenge, username, score, avatar }:
     {
         redis: RedisType,
         challenge: number,
@@ -35,7 +35,7 @@ export const addEntry = async ({ redis, challenge, username, score }:
     console.log(`Adding entry for challenge ${challenge} with username ${username} and score ${score}`);
     await redis.zAdd(getChallengeLeaderboardScoreKey(challenge), {
         member: username,
-        score,
+        score 
     });
 }
 
@@ -80,6 +80,5 @@ export const getRankingsForMember =  async ({ redis, challenge, username }: {
             getChallengeLeaderboardScoreKey(challenge),
             username,
         );
-
-        return score !== null;
+        return Boolean(score);
     }

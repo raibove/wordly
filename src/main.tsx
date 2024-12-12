@@ -152,17 +152,19 @@ Devvit.addCustomPostType({
                   break;
                 case 'GET_LEADERBOARD':
                   try{
-                    const leaderboard = await ChallengeLeaderboard.getRankingsForMember({
+                    const leaderboard = await ChallengeLeaderboard.getLeaderboardByScore({
                       redis: context['redis'],
                       challenge: initialState.challenge,
-                      username: initialState.user?.username!,
+                      sort: 'DESC',
+                      start: 0,
+                      stop: 10
+                      // avatar: initialState.user?.avatar!,
                     });
 
                     sendMessageToWebview(context, {
                       type: 'LEADERBOARD_SCORE',
                       payload: {
-                        rank: leaderboard.rank,
-                        score: leaderboard.score
+                       leaderboard
                       },
                     });
                   }catch(error){

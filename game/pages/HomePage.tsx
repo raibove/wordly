@@ -9,6 +9,7 @@ import { useGameState } from '../hooks/useGameState';
 import { HelpButton } from '../components/helpButton';
 import { Timer } from '../components/timer';
 import { GameStats } from '../components/gameStats';
+import { GameOver } from '../components/GameOver';
 // import { useGameState } from '../hooks/useGameState';
 
 export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
@@ -26,6 +27,7 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
     handleWordSelect,
     resetGame,
     startGame,
+    level
   } = useGameState();
 
   const onClose = () => {
@@ -58,7 +60,7 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
             Word Memory Game
           </motion.h1>
           <div className='flex gap-4 items-center'>
-          <GameStats score={score} />
+          <GameStats level={level} />
           {gamePhase === 'memorize' && <Timer seconds={timeLeft} />}
           </div>
         </div>
@@ -83,13 +85,15 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
 
             {
               gamePhase === 'end' && (
-                <div className='flex flex-col items-center'>
-                  <p>Game Over!</p>
-                  <p className='text-purple-300'>Final Score: {score}</p>
-                  <MagicButton onClick={()=>{
-                    setPage('leadboard');
-                  }}>Check Leaderboard</MagicButton>
-                </div>
+                <GameOver score={score} onCheckLeadboard={()=>{
+                  setPage('leadboard');
+                }}/>
+                // <div className='flex flex-col items-center'>
+                //   <p>Game Over!</p>
+                //   <p className='text-purple-300'>Final Score: {score}</p>
+                //   <MagicButton onClick={()=>{
+                //   }}>Check Leaderboard</MagicButton>
+                // </div>
               )
             }
           </motion.div>
@@ -103,22 +107,5 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
       </div>
       <HelpModal isOpen={isOpen} onClose={onClose} isFirstTimeOpen={firstTimeOpen} />
     </div>
-  );
-};
-
-const MagicButton = ({ children, ...props }: ComponentProps<'button'>) => {
-  return (
-    <button
-      className={cn(
-        'relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50',
-        props.className
-      )}
-      {...props}
-    >
-      <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
-        {children}
-      </span>
-    </button>
   );
 };

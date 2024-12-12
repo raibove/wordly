@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { sendToDevvit } from './utils';
 import { useDevvitListener } from './hooks/useDevvitListener';
 import Leaderboard from './pages/LeaderboardPage';
+import { Loader } from './components/Loader';
 
 const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
   switch (page) {
@@ -13,7 +14,11 @@ const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
     case 'leadboard':
       return <Leaderboard/>
     case '':
-      return <div>Loading</div>
+      return (
+        <div id='loader-init' className="w-full h-full max-w-md mx-auto p-4 flex justify-center items-center py-12">
+          <Loader size="lg" color="secondary" label="Loading..." />
+        </div>
+      );
     default:
       throw new Error(`Unknown page: ${page satisfies never}`);
   }
@@ -33,6 +38,8 @@ export const App = () => {
       console.log(initData);
       if(initData.hasUserPlayedChallenge){
         setPage('leadboard');
+      } else {
+        setPage('home');
       }
       const words = initData.challengeInfo.words.split(',') as string[];
       setInitialWords(words);

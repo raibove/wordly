@@ -25,8 +25,7 @@ export type BlocksToWebviewMessage = {
 } | {
     type: "LEADERBOARD_SCORE";
     payload: {
-      rank: number;
-      score: number;
+     leaderboard: {member: string, score: number}[]
     }
   }
 
