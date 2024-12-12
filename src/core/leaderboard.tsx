@@ -63,7 +63,7 @@ export const getRankingsForMember =  async ({ redis, challenge, username }: {
         getChallengeLeaderboardScoreKey(challenge),
         username,
     );
-
+    console.log('totalPlayersOnLeaderboard', totalPlayersOnLeaderboard)
 
       return {
         rank: totalPlayersOnLeaderboard - (userRank ?? 0),

@@ -85,15 +85,10 @@ export const HomePage = ({ initialWords }: { initialWords: string[] }) => {
 
             {
               gamePhase === 'end' && (
-                <GameOver score={score} onCheckLeadboard={()=>{
+                <GameOver score={score} 
+                onCheckLeadboard={()=>{
                   setPage('leadboard');
                 }}/>
-                // <div className='flex flex-col items-center'>
-                //   <p>Game Over!</p>
-                //   <p className='text-purple-300'>Final Score: {score}</p>
-                //   <MagicButton onClick={()=>{
-                //   }}>Check Leaderboard</MagicButton>
-                // </div>
               )
             }
           </motion.div>

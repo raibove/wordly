@@ -30,25 +30,6 @@ Devvit.configure({
   realtime: true,
 });
 
-// Devvit.addMenuItem({
-//   // Please update as you work on your idea!
-//   label: 'Create wordly',
-//   location: 'subreddit',
-//   forUserType: 'moderator',
-//   onPress: async (_event, context) => {
-//     const { reddit, ui } = context;
-//     const subreddit = await reddit.getCurrentSubreddit();
-//     const post = await reddit.submitPost({
-//       // Title of the post. You'll want to update!
-//       title: 'My first experience post',
-//       subredditName: subreddit.name,
-//       preview: <Preview />,
-//     });
-//     ui.showToast({ text: 'Created post!' });
-//     ui.navigateTo(post.url);
-//   },
-// });
-
 // Add a post type definition
 Devvit.addCustomPostType({
   name: 'Wordly',
@@ -179,7 +160,35 @@ Devvit.addCustomPostType({
                     context.ui.showToast(`I'm not sure what happened. Please try again.`);
                   }
                   break;
-                  default:
+                case 'GET_USER_RANK':
+                  try{
+                    const rank = await ChallengeLeaderboard.getRankingsForMember({
+                      redis: context['redis'],
+                      challenge: initialState.challenge,
+                      username: initialState.user?.username!,
+                      // avatar: initialState.user?.avatar!,
+                    });
+
+                    sendMessageToWebview(context, {
+                      type: 'USER_RANK',
+                      payload: {
+                        rank: rank.rank,
+                        score: rank.score
+                      },
+                    });
+                  }catch(error){
+                    isServerCall(error);
+
+                    console.error('Error getting user rank:', error);
+                    // Sometimes the error is nasty and we don't want to show it
+                    if (error instanceof Error && !['Error: 2'].includes(error.message)) {
+                      context.ui.showToast(error.message);
+                      return;
+                    }
+                    context.ui.showToast(`I'm not sure what happened. Please try again.`);
+                  }
+                  break;
+                default:
                   console.error('Unknown message type', data satisfies never);
                   break;
               }

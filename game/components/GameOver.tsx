@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Sparkles, RotateCcw } from 'lucide-react';
+import { Trophy, Sparkles } from 'lucide-react';
 
 interface GameOverProps {
   score: number;

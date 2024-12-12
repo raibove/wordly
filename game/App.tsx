@@ -6,6 +6,7 @@ import { sendToDevvit } from './utils';
 import { useDevvitListener } from './hooks/useDevvitListener';
 import Leaderboard from './pages/LeaderboardPage';
 import { Loader } from './components/Loader';
+import AlreadyPlayed from './pages/AlreadyPlayed';
 
 const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
   switch (page) {
@@ -13,6 +14,8 @@ const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
       return <HomePage initialWords={initialWords} />;
     case 'leadboard':
       return <Leaderboard/>
+    case 'alreadyPlayed':
+      return <AlreadyPlayed />
     case '':
       return (
         <div id='loader-init' className="w-full h-full max-w-md mx-auto p-4 flex justify-center items-center py-12">
@@ -37,7 +40,7 @@ export const App = () => {
     if (initData) {
       console.log(initData);
       if(initData.hasUserPlayedChallenge){
-        setPage('leadboard');
+        setPage('alreadyPlayed');
       } else {
         setPage('home');
       }

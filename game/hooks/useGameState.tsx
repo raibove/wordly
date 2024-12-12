@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getRandomWords, replaceRandomWord } from '../data/words';
-import type { GameState, GamePhase } from '../types';
+import { replaceRandomWord } from '../data/words';
+import type { GameState } from '../types';
 import { sendToDevvit } from '../utils';
 
 const INITIAL_TIME = 10;
 const MAX_MISTAKES = 1;
+const TIME_FOR_SUBSEQUENT_ROUNDS = INITIAL_TIME/2;
 
 export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>({
@@ -22,15 +23,13 @@ export const useGameState = () => {
   });
 
   const startNewRound = useCallback(() => {
-    // const initialWords = getRandomWords(WORDS_PER_LEVEL)
-    // TODO
     const initialWords: string[]=[];
     setGameState(prev => ({
       ...prev,
       words: initialWords,
       changedWordIndex: null,
       isVisible: true,
-      timeLeft: Math.max(INITIAL_TIME - Math.floor(prev.level / 3), 5),
+      timeLeft: Math.max(INITIAL_TIME, 5),
       gamePhase: 'memorize'
     }));
   }, []);
@@ -40,7 +39,7 @@ export const useGameState = () => {
       ...prev,
       changedWordIndex: null,
       isVisible: true,
-      timeLeft: Math.max(INITIAL_TIME - Math.floor(prev.level / 3), 5),
+      timeLeft: Math.max(TIME_FOR_SUBSEQUENT_ROUNDS, 5),
       gamePhase: 'memorize'
     }));
   }, []);
@@ -67,7 +66,6 @@ export const useGameState = () => {
 
   const handleWordSelect = useCallback((selectedIndex: number) => {
     const isCorrect = selectedIndex === gameState.changedWordIndex;
-    console.log('<< isCorrect', isCorrect)
     if(isCorrect){
       sendToDevvit({ type: 'UPDATE_SCORE', value: gameState.score + (isCorrect ? 10  : 0)});
     }
@@ -101,7 +99,6 @@ export const useGameState = () => {
   useEffect(() => {
     console.log(gameState.shouldStartGame)
     if (gameState.words.length === 0 && !gameState.isGameOver && gameState.shouldStartGame) {
-      console.log('Starting new round');
       startNewRound();
     }
   }, [startNewRound, gameState.isGameOver, gameState.shouldStartGame]);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useDevvitListener } from "../hooks/useDevvitListener"
 import { sendToDevvit } from "../utils"
 import { motion } from 'framer-motion';

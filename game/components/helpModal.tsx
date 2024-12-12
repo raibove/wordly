@@ -40,7 +40,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isFirstTi
               <p>Welcome to the Word Memory Game! Here's how to play:</p>
               
               <ol className="list-decimal list-inside space-y-2">
-                <li>You'll see 5 words for 10 seconds</li>
+                <li>You'll see 5 words for few seconds</li>
                 <li>Memorize these words carefully</li>
                 <li>The words will disappear briefly</li>
                 <li>When they reappear, one word will be different</li>
