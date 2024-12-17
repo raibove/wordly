@@ -210,32 +210,27 @@ Devvit.addCustomPostType({
             }}
           />
         ) : (
-          <vstack
+          <zstack width="100%" height='100%' alignment="center middle" backgroundColor='#0f172a'>
+          <image url='wordly3.png'
+            imageWidth={300}
+            imageHeight={300}
             height="100%"
             width="100%"
-            alignment="center middle"
-            gap="medium"
-            backgroundColor="rgba(88, 28, 135, 0.3)"
-          >
-            <text size="xxlarge" weight="bold" color="#FF4500">
-              Wordly
-            </text>
-            <text size="medium" color="#7C7C7C">
+            // resizeMode="cover"
+          />
+          {/* <text size="medium" color="#7C7C7C">
               Challenge #{initialState.challenge}
-            </text>
-            <button
-              onPress={() => {
-                setLaunched(true);
-              }}
-              appearance="primary"
-              size="large"
-            >
-
-              Launch Game
-            </button>
-          </vstack>
-
-
+            </text> */}
+          <button
+            onPress={() => {
+              setLaunched(true);
+            }}
+            // appearance='media'
+            size='large'
+          >
+            Launch Game
+          </button>
+        </zstack>
         )}
       </vstack>
     );
