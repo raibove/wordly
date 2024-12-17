@@ -5,7 +5,7 @@ const PageContext = createContext<Page | null>(null);
 const PageUpdaterContext = createContext<React.Dispatch<React.SetStateAction<Page>> | null>(null);
 
 export const PageContextProvider = ({ children }: { children: JSX.Element }) => {
-  const [page, setPage] = useState<Page>('');
+  const [page, setPage] = useState<Page>('loading');
 
   return (
     <PageUpdaterContext.Provider value={setPage}>

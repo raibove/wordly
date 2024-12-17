@@ -24,7 +24,7 @@ export const getLeaderboardByScore = async ({ redis, challenge, sort, start, sto
     return result;
 }
 
-export const addEntry = async ({ redis, challenge, username, score, avatar }:
+export const addEntry = async ({ redis, challenge, username, score }:
     {
         redis: RedisType,
         challenge: number,

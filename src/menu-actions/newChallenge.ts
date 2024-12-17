@@ -2,7 +2,7 @@ import { Devvit } from "@devvit/public-api";
 import { Challenge } from "../core/challenge.js";
 
 Devvit.addMenuItem({
-  label: "Wordly testing",
+  label: "Create Wordly Game",
   forUserType: "moderator",
   location: "subreddit",
   onPress: async (_event, context) => {

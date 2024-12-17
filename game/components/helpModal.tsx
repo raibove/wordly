@@ -55,7 +55,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isFirstTi
                 isFirstTimeOpen && (
                 <button
                   onClick={onClose}
-                  className='m-4 bg-purple-500 text-yellow-300 h-12 p-2 items-center justify-center rounded-full flex'
+                  className='m-4 bg-purple-500 text-white h-12 p-2 items-center justify-center rounded-full flex'
                   >
                     Start Playing
                 </button>

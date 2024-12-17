@@ -3,7 +3,7 @@ export interface ChallengeInfo {
   totalPlayers: number,
 }
 
-export type Page = "home" | "leadboard" | 'alreadyPlayed' | '';
+export type Page = "home" | "leadboard" | 'alreadyPlayed' | 'loading';
 
 export type WebviewToBlockMessage = { type: "INIT" } |
 {
@@ -14,6 +14,8 @@ export type WebviewToBlockMessage = { type: "INIT" } |
   type: "GET_LEADERBOARD";
 } | {
   type: "GET_USER_RANK";
+} | {
+  type: "CREATE_NEW_GAME"
 }
 
 export type BlocksToWebviewMessage = {

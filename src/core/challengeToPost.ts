@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { RedisType } from "./challenge.js";
 
 export * as ChallengeToPost from "./challengeToPost.js";

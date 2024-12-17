@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Award } from 'lucide-react';
-import { Avatar } from './Avatar';
 import type { LeaderboardPlayer } from '../types';
 
 interface LeaderboardEntryProps {

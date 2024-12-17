@@ -114,7 +114,7 @@ export const makeNewChallenge = async ({ context }: { context: Devvit.Context })
       redis: txn,
       challenge: newChallengeNumber,
       config: {
-        words: newWords,
+        words: newWords.join(','),
         totalPlayers: 0,
       },
     });

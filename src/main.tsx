@@ -2,7 +2,7 @@ import './triggers/install.js';
 import './triggers/upgrade.js';
 import './menu-actions/newChallenge.js';
 
-import { Devvit, useAsync, useState } from '@devvit/public-api';
+import { Devvit, useState } from '@devvit/public-api';
 import { DEVVIT_SETTINGS_KEYS } from './constants.js';
 import { isServerCall, sendMessageToWebview } from './utils/utils.js';
 import { WebviewToBlockMessage } from '../game/shared.js';
@@ -79,15 +79,12 @@ Devvit.addCustomPostType({
             height={'100%'}
             onMessage={async (event) => {
               const data = event as unknown as WebviewToBlockMessage;
-              
+
               switch (data.type) {
                 case 'INIT':
-                  const challengeNumber = await ChallengeToPost.getChallengeNumberForPost({
-                    postId: context.postId!,
-                    redis: context.redis,
-                  });
-                  const username =  initialState.user?.username!;
-                  const [challengeInfo,hasUserPlayedChallenge] = await Promise.all([
+                  const challengeNumber = initialState.challenge;
+                  const username = initialState.user?.username!;
+                  const [challengeInfo, hasUserPlayedChallenge] = await Promise.all([
                     Challenge.getChallenge({
                       challenge: challengeNumber,
                       redis: context.redis,
@@ -98,7 +95,7 @@ Devvit.addCustomPostType({
                       challenge: challengeNumber,
                     })
                   ]);
-                  
+
                   console.log('hasUserPlayedChallenge', hasUserPlayedChallenge);
                   sendMessageToWebview(context, {
                     type: 'INIT_RESPONSE',
@@ -111,7 +108,7 @@ Devvit.addCustomPostType({
                   });
                   break;
                 case 'UPDATE_SCORE':
-                  try{
+                  try {
                     await ChallengeLeaderboard.addEntry({
                       redis: context['redis'],
                       challenge: initialState.challenge,
@@ -119,7 +116,7 @@ Devvit.addCustomPostType({
                       username: initialState.user?.username!,
                       // avatar: initialState.user?.avatar!,
                     })
-                  }catch(error){
+                  } catch (error) {
                     isServerCall(error);
 
                     console.error('Error submitting guess:', error);
@@ -132,7 +129,7 @@ Devvit.addCustomPostType({
                   }
                   break;
                 case 'GET_LEADERBOARD':
-                  try{
+                  try {
                     const leaderboard = await ChallengeLeaderboard.getLeaderboardByScore({
                       redis: context['redis'],
                       challenge: initialState.challenge,
@@ -145,10 +142,10 @@ Devvit.addCustomPostType({
                     sendMessageToWebview(context, {
                       type: 'LEADERBOARD_SCORE',
                       payload: {
-                       leaderboard
+                        leaderboard
                       },
                     });
-                  }catch(error){
+                  } catch (error) {
                     isServerCall(error);
 
                     console.error('Error getting leaderboard:', error);
@@ -161,7 +158,7 @@ Devvit.addCustomPostType({
                   }
                   break;
                 case 'GET_USER_RANK':
-                  try{
+                  try {
                     const rank = await ChallengeLeaderboard.getRankingsForMember({
                       redis: context['redis'],
                       challenge: initialState.challenge,
@@ -176,7 +173,7 @@ Devvit.addCustomPostType({
                         score: rank.score
                       },
                     });
-                  }catch(error){
+                  } catch (error) {
                     isServerCall(error);
 
                     console.error('Error getting user rank:', error);
@@ -188,6 +185,24 @@ Devvit.addCustomPostType({
                     context.ui.showToast(`I'm not sure what happened. Please try again.`);
                   }
                   break;
+                case 'CREATE_NEW_GAME':
+                  try {
+                    const { postUrl } = await Challenge.makeNewChallenge({ context });
+
+                    context.ui.navigateTo(postUrl);
+                  } catch (error) {
+                    isServerCall(error);
+
+                    console.error('Error creating post:', error);
+                    // Sometimes the error is nasty and we don't want to show it
+                    if (error instanceof Error && !['Error: 2'].includes(error.message)) {
+                      context.ui.showToast(error.message);
+                      return;
+                    }
+                    context.ui.showToast(`I'm not sure what happened. Please try again.`);
+                  }
+                  break;
+
                 default:
                   console.error('Unknown message type', data satisfies never);
                   break;
@@ -195,13 +210,32 @@ Devvit.addCustomPostType({
             }}
           />
         ) : (
-          <button
-            onPress={() => {
-              setLaunched(true);
-            }}
+          <vstack
+            height="100%"
+            width="100%"
+            alignment="center middle"
+            gap="medium"
+            backgroundColor="rgba(88, 28, 135, 0.3)"
           >
-            Launch
-          </button>
+            <text size="xxlarge" weight="bold" color="#FF4500">
+              Wordly
+            </text>
+            <text size="medium" color="#7C7C7C">
+              Challenge #{initialState.challenge}
+            </text>
+            <button
+              onPress={() => {
+                setLaunched(true);
+              }}
+              appearance="primary"
+              size="large"
+            >
+
+              Launch Game
+            </button>
+          </vstack>
+
+
         )}
       </vstack>
     );

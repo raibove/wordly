@@ -7,7 +7,6 @@ import { useDevvitListener } from './hooks/useDevvitListener';
 import Leaderboard from './pages/LeaderboardPage';
 import { Loader } from './components/Loader';
 import AlreadyPlayed from './pages/AlreadyPlayed';
-import { getRandomWords } from './data/words';
 
 const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
   switch (page) {
@@ -17,7 +16,7 @@ const getPage = (page: Page, { initialWords }: { initialWords: string[]}) => {
       return <Leaderboard/>
     case 'alreadyPlayed':
       return <AlreadyPlayed />
-    case '':
+    case 'loading':
       return (
         <div id='loader-init' className="w-full h-full max-w-md mx-auto p-4 flex justify-center items-center py-12">
           <Loader size="lg" color="secondary" label="Loading..." />
@@ -39,7 +38,6 @@ export const App = () => {
 
   useEffect(() => {
     if (initData) {
-      console.log(initData);
       if(initData.hasUserPlayedChallenge){
         setPage('alreadyPlayed');
       } else {
@@ -49,12 +47,6 @@ export const App = () => {
       setInitialWords(words);
     }
   }, [initData, setInitialWords]);
-
-  // // TODO delete this
-  // useEffect(()=>{
-  //   setInitialWords(getRandomWords(5));
-  //   setPage('home');
-  // },[])
 
   return <div className="h-full">{getPage(page, { initialWords })}</div>;
 };
